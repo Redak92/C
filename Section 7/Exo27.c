@@ -1,78 +1,105 @@
-    #include <stdlib.h>
-    #include <stdio.h>
-    #include <ctype.h>
-    #include <string.h>
-    #include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+#include <math.h>
+
+
+// Calcul de la moyenne d'un tableau d'entiers
+float moy_tab(int tab[], int taille) {
+    if (taille == 0) {
+        return 0; // Si la taille est 0, retourne 0 pour éviter une division par zéro
+    }
     
+    float result = 0;
     
-    float moy_tab(int tab[],int taille){
-        if(taille == 0){ return 0; }
-        float result = 0;
-        
-        for(int i = 0;i < taille;i++){
-            result+=tab[i];
-            
+    for (int i = 0; i < taille; i++) {
+        result += tab[i]; // Somme de tous les éléments du tableau
+    }
+    
+    return result / taille; // Division de la somme par la taille pour obtenir la moyenne
+}
+
+// Calcul de la variance d'un tableau d'entiers
+float variance(int tab[], int taille, float moyenne) {
+    if (taille == 0) {
+        return 0; // Si la taille est 0, retourne 0 pour éviter une division par zéro
+    }
+    
+    float result = 0;
+    
+    for (int i = 0; i < taille; i++) {
+        result += (tab[i] - moyenne) * (tab[i] - moyenne); // Somme des carrés des écarts à la moyenne
+    }
+    
+    return result / taille; // Division de la somme par la taille pour obtenir la variance
+}
+
+// Calcul de l'écart-type à partir de la variance
+float ecart_type(float variance) {
+    return sqrt(variance); // Utilisation de la fonction sqrt() pour calculer la racine carrée de la variance
+}
+
+// Affichage d'un tableau d'entiers
+void aff_tab(int tab[], int taille) {
+    printf("[");
+    for (int i = 0; i < taille; i++) {
+        printf("%d", tab[i]);
+        if (i != taille - 1) {
+            printf(", "); // Affichage d'une virgule pour séparer les éléments, sauf pour le dernier élément
         }
-        return result/taille;
     }
-    float variance(int tab[],int taille, float moyenne){
-        if(taille == 0){ return 0; }
-    
-        float result = 0;
-        
-        for(int i = 0;i < taille;i++){
-            result+=(tab[i] - moyenne) * (tab[i] - moyenne);
-            
+    printf("]\n");
+}
+
+// Recherche d'une valeur dans un tableau d'entiers
+int research(int value, int tab[], int taille) {
+    for (int i = 0; i < taille; i++) {
+        if (tab[i] == value) {
+            printf("%d trouvé à l'indice %d\n", value, i); // Affichage de la valeur trouvée et de son indice
+            return 1;
         }
-        return result/taille;
     }
     
-    float ecart_type(float variance){
-        
-        return sqrt(variance);
+    printf("Valeur non trouvée dans le tableau\n"); // Affichage si la valeur n'est pas trouvée
+    return 0;
+}
+
+// Recherche du minimum dans un tableau d'entiers
+int minimum(int tab[], int taille) {
+    if (taille == 0) {
+        return -1; // Si la taille est 0, retourne -1 pour indiquer que le tableau est vide
     }
     
+    int min = tab[0];
     
-    void aff_tab(int tab[], int taille){
-        printf("[");
-        for(int i = 0;i < taille;i++){
-            printf("%d",tab[i]);
-            if(i != taille - 1){printf(", ");}
+    for (int i = 1; i < taille; i++) {
+        if (tab[i] < min) {
+            min = tab[i]; // Mise à jour du minimum si un élément inférieur est trouvé
         }
-        printf("]\n");
-    
     }
     
-    int research(int value,int tab[],int taille){
-        
-        for(int i = 0;i < taille;i++){
-            if(tab[i] == value){
-                printf("%d trouvé à l'indice %d\n",value,i);
-                return 1;
-            }
+    return min; // Retourne le minimum
+}
+
+// Recherche du maximum dans un tableau d'entiers
+int maximum(int tab[], int taille) {
+    if (taille == 0) {
+        return -1; // Si la taille est 0, retourne -1 pour indiquer que le tableau est vide
+    }
+    
+    int max = tab[0];
+    
+    for (int i = 1; i < taille; i++) {
+        if (tab[i] > max) {
+            max = tab[i]; // Mise à jour du maximum si un élément supérieur est trouvé
         }
-        printf("Valeur non trouvée dans le tableau\n");
-        return 0;
-    }
-    int minimum(int tab[],int taille){
-        if(taille == 0){ return -1; }
-    
-        int min = tab[0];
-        for(int i = 1;i < taille;i++){
-            if(tab[i] < min) { min = tab[i]; }
-        }
-        return min;
-    }
-    int maximum(int tab[],int taille){
-        if(taille == 0){ return -1; }
-    
-        int min = tab[0];
-        for(int i = 1;i < taille;i++){
-            if(tab[i] > min) { min = tab[i]; }
-        }
-        return min;
     }
     
+    return max; // Retourne le maximum
+}
+
+// Tri du tableau d'entiers en utilisant l'algorithme de tri par sélection
 void trier(int tableau[], int taille) {
     int i, j, min, temp;
   
@@ -80,107 +107,170 @@ void trier(int tableau[], int taille) {
         min = i;
         for (j = i + 1; j < taille; j++) {
             if (tableau[j] < tableau[min]) {
-                min = j;
+                min = j; // Recherche de l'indice du plus petit élément dans le reste du tableau
             }
         }
         
-        
+        // Échange de l'élément courant avec le plus petit élément trouvé
         temp = tableau[min];
         tableau[min] = tableau[i];
         tableau[i] = temp;
     }
 }
+
+// Calcul du n-quartile (1er, 2e ou 3e quartile) dans un tableau d'entiers trié
 float n_quartile(int quartile, int tab[], int taille) {
     int tried[taille];
-    memcpy(tried, tab, taille * sizeof(int));
-    trier(tried, taille);
+    memcpy(tried, tab, taille * sizeof(int)); // Copie du tableau original dans un tableau temporaire
+    trier(tried, taille); // Tri du tableau temporaire
     
-    switch(quartile){
-        
+    switch (quartile) {
         case 1:
             int w1 = taille % 4;
             int w2 = 4 - w1;
             float result = (w2 * tried[taille/4] + w1 * tried[(taille/4) +1]) / 4;
-            return result;
+            return result; // Calcul du 1er quartile en utilisant la formule spécifique
         case 2:
-
-            if(taille % 2 == 0){
-                return (float)((tried[taille/2] + tried[(taille - 1)/2])/2);
-            }else{
-                return tried[taille/2];
+            if (taille % 2 == 0) {
+                return (float)((tried[taille/2] + tried[(taille - 1)/2]) / 2); // Calcul de la médiane pour une taille paire
+            } else {
+                return tried[taille/2]; // Calcul de la médiane pour une taille impaire
             }
         case 3:
-           /* int w3 = (taille*3) % 4;
-            int w4 = 4 - w3;
-            float result1 = (w4 * tab[(taille * 3)/4] + w3 * tab[((taille * 3)/4) +1]) / 4;
-            return result1; */
-            return tried[(((taille*3)/4)-1)];
-
-
+            return tried[(((taille * 3)/4) - 1)]; // Calcul du 3e quartile en utilisant la formule spécifique
     }
 }
 
-    void jouer(){
-    	{
-    	int donnees[10000];
-    	char choix[20];
-    	int valeur,cpt = 0;
-		printf("-Ajouter [VALEUR] \n-Supprimer \n-Rechercher [VALEUR] \n-Afficher \n-Statistiques \n-Trier \n-Quitter \n");
-    	while(strcmp(choix,"quitter") != 0){
-    	printf("Entrez votre choix:");
-    	if(scanf(" %19s", choix) != 1){
-    	    exit(EXIT_FAILURE);
-    	}
-    	
-    	if(strcmp(choix,"ajouter") == 0){
-    	    if(scanf(" %d",&valeur) != 1) { while(getchar() != '\n'); printf("Erreur de syntaxe\n"); }
-    	    donnees[cpt] = valeur;
-    	    cpt++;
-    	}else if(strcmp(choix,"supprimer") == 0){
-    	    if(cpt == 0){
-    	        printf("Désolé, le tableau est déjà vide\n");
-    	        continue;
-    	    }
-    	    cpt--;
-    	}else if(strcmp(choix,"rechercher") == 0){
+// Fonction principale pour jouer avec le tableau
+void jouer() {
+    int donnees[10000]; // Tableau pour stocker les données
+    char choix[20]; // Chaîne de caractères pour stocker le choix de l'utilisateur
+    int valeur, cpt = 0; // Variable pour stocker la valeur entrée par l'utilisateur et le compteur de données
     
-    	    if(scanf(" %d",&valeur) != 1) { while(getchar() != '\n'); printf("Erreur de syntaxe\n"); }
-            research(valeur,donnees,cpt);
+    printf("- Ajouter [VALEUR]\n- Supprimer\n- Rechercher [VALEUR]\n- Afficher\n- Statistiques\n- Trier\n- Quitter\n");
     
-    	}else if(strcmp(choix,"afficher") == 0){
-    	    aff_tab(donnees,cpt);
+    while (strcmp(choix, "quitter") != 0) {
+        printf("Entrez votre choix: ");
+        
+        if (scanf(" %19s", choix) != 1) {
+            exit(EXIT_FAILURE); // Sortie du programme en cas de problème de lecture de l'entrée utilisateur
+        }
+        
+        if (strcmp(choix, "ajouter") == 0) {
+            if (scanf(" %d", &valeur) != 1) {
+                while (getchar() != '\n');
+                printf("Erreur de syntaxe\n"); // Affichage d'une erreur si la valeur entrée est invalide
+            }
+            donnees[cpt] = valeur; // Ajout de la valeur dans le tableau
+            cpt++; // Incrémentation du compteur
+        } else if (strcmp(choix, "supprimer") == 0) {
+            if (cpt == 0) {
+                printf("Désolé, le tableau est déjà vide\n"); // Affichage si le tableau est déjà vide
+                continue; // Passe à l'itération suivante de la boucle
+            }
+            cpt--; // Décrémentation du compteur pour supprimer la dernière valeur ajoutée
+        } else if (strcmp(choix, "rechercher") == 0) {
+            if (scanf(" %d", &valeur) != 1) {
+                while (getchar() != '\n');
+                printf("Erreur de syntaxe\n"); // Affichage d'une erreur si la valeur entrée est invalide
+            }
+            research(valeur, donnees, cpt); // Recherche de la valeur dans le tableau
+        } else if (strcmp(choix, "afficher") == 0) {
+            aff_tab(donnees, cpt); // Affichage du tableau
+        } else if (strcmp(choix, "stat") == 0) {
+            printf("Moyenne : %g\n", moy_tab(donnees, cpt)); // Calcul et affichage de la moyenne
+            printf("Ecart type: %g\n", ecart_type(variance(donnees, cpt, moy_tab(donnees, cpt)))); // Calcul et affichage de l'écart-type
+            printf("Minimum: %d\n", minimum(donnees, cpt)); // Recherche et affichage du minimum
+            printf("Maximum: %d\n", maximum(donnees, cpt)); // Recherche et affichage du maximum
+            printf("Premier quartile: %g\n", n_quartile(1, donnees, cpt)); // Calcul et affichage du 1er quartile
+            printf("Médiane: %g\n", n_quartile(2, donnees, cpt)); // Calcul et affichage de la médiane
+            printf("Troisième quartile: %g\n", n_quartile(3, donnees, cpt)); // Calcul et affichage du 3e quartile
+        } else if (strcmp(choix, "trier") == 0) {
+            trier(donnees, cpt); // Tri du tableau
+        } else {
+            printf("Désolé je n'ai pas compris, réessayez !\n"); // Affichage en cas de choix invalide
+            while (getchar() != '\n');
+            continue; // Passe à l'itération suivante de la boucle
+        }
+    }
     
-    	}else if(strcmp(choix,"stat") == 0){
-    	   printf("Moyenne : %g\n",moy_tab(donnees,cpt));
-    	   printf("Ecart type: %g\n",ecart_type(variance(donnees,cpt,moy_tab(donnees,cpt))));
-    	   printf("Minimum: %d\n",minimum(donnees,cpt));
-    	   printf("Maximum: %d\n",maximum(donnees,cpt));
-    	   printf("Premier quartile: %g\n",n_quartile(1,donnees,cpt));
-    	   printf("Médiane: %g\n",n_quartile(2,donnees,cpt));
-    	   printf("Troisième quartile: %g\n",n_quartile(3,donnees,cpt));
+    aff_tab(donnees, cpt); // Affichage final du tableau
+}
 
-
-    	}else if(strcmp(choix,"trier") == 0){
-    	    trier(donnees,cpt);
-    	    
-    	}else{
-    	    printf("Désolé je n'ai pas compris, reessayez !\n");
-    	    while(getchar() != '\n');
-    	    continue;
-    	}
-    	
-    	
-    	}
-    	
-    	aff_tab(donnees,cpt);
-    	
-    	
-    }
-    	
-    }
-    
-    int main(){
-    	
-    	jouer();
-    	return 0;
-    }
+int main() {
+    jouer(); // Appel de la fonction pour commencer à jouer
+    return 0;
+}
+/* MONSIEUR J'AIME TELLEMENT COMMENTER JE POURRAIS FAIRE CA TOUTE LA JOURNEE ET LA NUIT AUSSI SI IL LE FAUT HAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+HAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHAHAHAHAHHHAHAHAHHAHA
+*/

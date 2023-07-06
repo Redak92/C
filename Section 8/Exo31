@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int** allouer_grille(int largeur, int hauteur) {
+    int** grille = (int**)malloc(hauteur * sizeof(int*));
+    for (int i = 0; i < hauteur; i++) {
+        grille[i] = (int*)malloc(largeur * sizeof(int));
+    }
+    return grille;
+}
+
+void afficher(int** grille, int largeur, int hauteur) {
+    for (int i = 0; i < hauteur; i++) {
+        for (int j = 0; j < largeur; j++) {
+            printf("%d ", grille[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void fill(int** grille, int largeur, int hauteur) {
+    for(int i = 0;i < hauteur;i++){
+        for(int x = 0;x < largeur;x++){
+            
+        }
+    }
+}
+
+void free_grille(int *** grille);
+
+int main() {
+    int largeur, hauteur;
+        int ** grille = NULL;
+    
+    printf("Entrez largeur et hauteur de la grille : ");
+    scanf("%d %d", &largeur, &hauteur);
+    
+    grille = allouer_grille(largeur, hauteur);
+    
+    fill(grille,largeur,hauteur);
+
+    
+    afficher(grille, largeur, hauteur);
+
+    
+    exit(EXIT_SUCCESS);
+}

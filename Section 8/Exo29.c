@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #define NB_MAISONS 7
 
-
+// Je sais pas quoi commenter sur cet exercice, c'est l'utilisation basiques des pointeurs. 
     void afficher_maison(int *maison) {
     printf("%p -> %d \n",maison,*maison);
 }

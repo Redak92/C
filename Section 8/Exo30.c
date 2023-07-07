@@ -10,9 +10,9 @@ int main() {
     printf("Bonjour, entrez votre nom et prénom : ");
     scanf("%s %s", nom, prenom);
     
-    full_name = (char *)malloc((strlen(nom) + strlen(prenom) + 2) * sizeof(char));
+    full_name = (char *)malloc((strlen(nom) + strlen(prenom) + 2) * sizeof(char));  // Allocation dynamique de [TAILLE_NOM] + [TAILLE_PRENOM] + 2 (l'espace et le caractère de fin) le tout par 1 (la taille d'un char) 
     
-    sprintf(full_name, "%s %s", nom, prenom);
+    sprintf(full_name, "%s %s", nom, prenom);  // Permet la concaténation de nom et prénom
 
     printf("Vous êtes donc : %s !\n", full_name);
     
